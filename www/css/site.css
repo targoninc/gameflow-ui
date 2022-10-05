@@ -1,0 +1,309 @@
+:root {
+    --panel-background: #222;
+    --panel-background-secondary: #2a2a2a;
+    --panel-border: #555;
+    --border-radius: 3px;
+    --text-primary: #fff;
+    --text-highlight: #0af;
+    --text-disabled: #888;
+    --heading-background: #334;
+    --top-height: 89px;
+    --base-padding: 10px;
+    --button-padding: 2px 8px;
+    --button-background: var(--panel-border);
+    --button-color: var(--text-primary);
+    --font-size: 16px;
+    --sidepanel-width: 300px;
+    --dialog-background: var(--panel-background);
+    --heading-padding: calc(var(--base-padding) * .5);
+    --inner-shadow: #666;
+    --property-padding: 0 0 0 calc(var(--base-padding) * .5);
+    --popup-background: var(--dialog-background);
+    --context-padding: calc(var(--base-padding) * .75);
+    --azure: #335;
+    --running: #0044ff;
+    --active: #00ff00;
+}
+
+html, body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--panel-background);
+}
+
+* {
+    color: var(--text-primary);
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    width: calc(100% - 1px);
+    max-height: calc(100% - 5px);
+    min-height: calc(100% - 5px);
+}
+
+#topPanel {
+    min-height: var(--top-height);
+    width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: calc(var(--font-size) + 4px);
+}
+
+h2 {
+    font-weight: 500;
+    font-size: 1.25em;
+}
+
+#page {
+    height: 100%;
+}
+
+#main, .settings {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    position: relative;
+    height: calc(100% - var(--top-height));
+}
+
+.floating {
+    position: absolute;
+    top: var(--base-padding);
+    left: var(--base-padding);
+}
+
+#leftPanel {
+    width: var(--sidepanel-width);
+    height: 100%;
+}
+
+.infoBox {
+    padding: var(--base-padding);
+}
+
+.row {
+    padding: 0 var(--base-padding);
+}
+
+.panel {
+    background-color: var(--panel-background);
+    border: 1px solid var(--panel-border);
+    overflow-y: auto;
+    position: relative;
+}
+
+#centerPanel {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+button, .inputMappingInput {
+    padding: var(--button-padding);
+    background: var(--button-background);
+    color: var(--button-color);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
+    cursor: pointer;
+}
+
+.button-primary {
+    align-items: center;
+}
+
+button .material-icons {
+    font-size: var(--font-size);
+}
+
+button:hover .material-icons {
+    filter: invert(90%);
+}
+
+button:hover {
+    background: var(--button-color);
+    color: var(--button-background);
+}
+
+.navigationItem.active button {
+    border: 1px solid var(--text-primary);
+    box-shadow: 0 13px 0 1px var(--heading-background);
+}
+
+.hidden {
+    display: none;
+}
+
+.flex, .flex-v {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--base-padding);
+}
+
+.smallgap {
+    gap: calc(var(--base-padding) / 2);
+}
+
+.flex-v {
+    flex-direction: column;
+}
+
+.flex .progress {
+    margin: auto;
+}
+
+.stretch {
+    flex-grow: 1;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.progress[progress-type="bar"] {
+    height: 10px;
+    background: var(--running);
+    transition: 1s width ease;
+    border-radius: var(--border-radius);
+    margin-left: 0;
+}
+
+.inputs {
+    gap: 0;
+}
+
+.inputs h3 {
+    font-size: var(--font-size);
+    padding: var(--base-padding);
+    border-radius: var(--border-radius);
+}
+
+.inputs-azure {
+    background: var(--azure);
+}
+
+.inputMapping {
+    padding: var(--base-padding);
+    justify-content: space-between;
+}
+
+@keyframes loading-border {
+    0% {
+        border-color: var(--running);
+    }
+    100% {
+        border-color: var(--text-primary);
+    }
+}
+
+.statusCount {
+    font-family: monospace;
+}
+
+.statusCountName {
+    background: var(--panel-background);
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+}
+
+.settings {
+    margin: auto;
+    padding: var(--base-padding);
+    background: var(--panel-background);
+    flex-wrap: nowrap;
+    overflow: auto;
+}
+
+section {
+    padding: var(--base-padding);
+    background: var(--panel-background-secondary);
+    border-radius: var(--border-radius);
+}
+
+.extension {
+    border: 1px solid var(--text-primary);
+    padding: var(--base-padding);
+    border-radius: var(--border-radius);
+    width: max-content;
+}
+
+.extensionTitle {
+    font-weight: 700;
+    width: max-content;
+}
+
+.extensionIcon.material-icons {
+    width: max-content;
+    font-size: var(--font-size);
+    display: flex;
+    align-items: center;
+    margin-right: -5px;
+}
+
+.extensionIcon.material-icons.gray {
+    filter: brightness(50%);
+}
+
+.extensionIcon.material-icons.orange {
+    filter: invert(50%) sepia(94%) saturate(503%) hue-rotate(356deg) brightness(103%) contrast(108%);
+}
+
+.extensionIcon.material-icons.green {
+    filter: invert(70%) sepia(37%) saturate(4837%) hue-rotate(87deg) brightness(114%) contrast(110%);
+}
+
+.extensionInfo {
+    font-family: monospace;
+}
+
+.extensionFeature {
+    font-size: calc(var(--font-size) - 4px);
+    background: var(--popup-background);
+    border-radius: var(--border-radius);
+    padding: var(--button-padding);
+    font-weight: 700;
+}
+
+.actionContainer {
+    padding: var(--base-padding);
+    background: var(--panel-background-secondary);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border: 1px solid var(--button-background);
+    border-bottom: none;
+}
+
+.toggle {
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    padding: var(--button-padding);
+    background: var(--panel-background);
+}
+
+.toggle.active {
+    background: var(--panel-border);
+}
+
+.toggle .material-icons {
+    font-size: calc(var(--font-size) - 2px);
+}
+
+.active .hideOnActive, .showOnActive {
+    display: none;
+}
+
+.active .showOnActive, .hideOnActive {
+    display: flex;
+}

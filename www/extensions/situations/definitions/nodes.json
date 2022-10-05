@@ -1,0 +1,43 @@
+{
+  "situation": {
+    "type": "situation",
+    "title": "Situation",
+    "properties": [
+      {
+        "name": "SituationType",
+        "id": "situationtype",
+        "default": "",
+        "mapping": "none",
+        "type": "string"
+      },
+      {
+        "name": "Text",
+        "id": "text",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "Continue Audio",
+        "id": "continue_audio",
+        "default": "",
+        "mapping": "both",
+        "type": "bool"
+      },
+      {
+        "name": "Audio",
+        "id": "audio",
+        "default": "",
+        "mapping": "both",
+        "type": "string"
+      },
+      {
+        "name": "Max Volume",
+        "id": "maxvolume",
+        "default": "",
+        "mapping": "none",
+        "type": "string"
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "string": {
+    "type": "string",
+    "title": "String",
+    "properties": [{
+      "name": "Value",
+      "id": "value",
+      "default": "",
+      "mapping": "output",
+      "type": "string"
+    }]
+  },
+  "file": {
+    "type": "file",
+    "title": "File",
+    "properties": [{
+      "name": "Value",
+      "id": "value",
+      "default": "",
+      "mapping": "output",
+      "type": "file"
+    }]
+  }
+}

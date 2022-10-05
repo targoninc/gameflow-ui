@@ -1,0 +1,93 @@
+{
+  "concat": {
+    "type": "concat",
+    "title": "Add two strings",
+    "logic": "f(concat,{p0},{p1})",
+    "properties": [
+      {
+        "name": "a",
+        "id": "a",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "b",
+        "id": "b",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Result",
+        "id": "result",
+        "type": "string"
+      }
+    ]
+  },
+  "replace": {
+    "type": "replace",
+    "title": "Replace a substring",
+    "logic": "f(replace,{p0},{p1},{p2})",
+    "properties": [
+      {
+        "name": "base",
+        "id": "a",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "search",
+        "id": "b",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "replace",
+        "id": "c",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Result",
+        "id": "result",
+        "type": "string"
+      }
+    ]
+  },
+  "condition": {
+    "type": "condition",
+    "title": "Condition",
+    "logic": "f(regex,{p0},{i0})",
+    "properties": [
+      {
+        "name": "Regex",
+        "id": "regex",
+        "default": ".*",
+        "mapping": "input",
+        "type": "string"
+      }
+    ],
+    "inputs": [
+      {
+        "name": "input",
+        "id": "input",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Result",
+        "id": "result",
+        "type": "bool"
+      }
+    ]
+  }
+}

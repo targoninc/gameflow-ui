@@ -1,0 +1,193 @@
+.litegraph.dialog {
+    position: absolute;
+    bottom: calc(5px + var(--base-padding));
+    right: var(--base-padding);
+    padding: var(--base-padding);
+    background: var(--dialog-background);
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-padding);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--text-primary);
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-padding);
+}
+
+.dialog-header {
+    display: flex;
+    gap: var(--base-padding);
+    justify-content: space-between;
+}
+
+.node_type, .litemenu-title {
+    font-family: monospace;
+    font-weight: 600;
+}
+
+.litemenu-title {
+    padding: var(--button-padding) !important;
+    background: var(--text-primary) !important;
+    color: var(--popup-background) !important;
+}
+
+.property {
+    display: flex;
+    align-items: center;
+    gap: var(--base-padding);
+    justify-content: space-between;
+    border: 1px solid var(--panel-border);
+    padding: var(--property-padding);
+}
+
+.property_name {
+    font-family: monospace;
+    font-size: var(--font-size);
+}
+
+span.close, span[contenteditable="true"], .property_value, .litesearchbox .value.rounded {
+    background: var(--button-background);
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    min-height: var(--font-size);
+}
+
+span.close:hover, span[contenteditable="true"]:hover, .litesearchbox .value.rounded:hover {
+    background: var(--button-color);
+    color: var(--button-background);
+}
+
+span.close {
+    display: flex;
+    font-size: calc(var(--font-size) - 6px);
+    align-items: center;
+    border: 1px solid var(--text-primary);
+}
+
+.dialog-content h3 {
+    font-size: var(--font-size);
+    font-weight: 500;
+    padding: var(--heading-padding) var(--base-padding);
+    text-align: center;
+    border-radius: var(--border-radius);
+    background: var(--heading-background);
+    box-shadow: inset 0 -2px 10px -7px var(--inner-shadow);
+}
+
+.btn.delete {
+    background: transparent;
+    border: 1px solid red;
+    color: red;
+}
+
+.btn.delete:hover {
+    background: red;
+    color: white;
+}
+
+.litegraph.litesearchbox, .propertyEditor {
+    box-shadow: none !important;
+    border: 1px solid var(--panel-border);
+    background: var(--popup-background);
+    border-radius: calc(var(--border-radius) * 2);
+}
+
+.propertyEditor {
+    padding: var(--base-padding);
+    min-height: 0;
+}
+
+.graphdialog input, .graphdialog textarea, .graphdialog select {
+    border-radius: var(--border-radius);
+}
+
+.litegraph.lite-search-item {
+    padding: var(--base-padding);
+}
+
+.search_header {
+    padding: var(--base-padding);
+}
+
+.litesearchbox .value.rounded {
+    flex-grow: 1;
+}
+
+.helper {
+    border-radius: var(--border-radius);
+}
+
+.litegraph.litesearchbox .helper {
+    max-height: 300px;
+}
+
+.litegraph.litecontextmenu {
+    box-shadow: none !important;
+    background: var(--popup-background);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--panel-border);
+    overflow: hidden;
+}
+
+.litemenu-entry.submenu {
+    background: var(--popup-background) !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: var(--context-padding) !important;
+    border-top: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.litemenu-entry.submenu.has_submenu {
+    border-right: 3px solid var(--text-primary) !important;
+}
+
+.litemenu-entry .material-icons {
+    padding: 0;
+    margin-top: -8px;
+    margin-left: -2px;
+    margin-right: 6px;
+    height: 8px;
+    font-size: 18px;
+    width: min-content;
+}
+
+.litemenu-entry.submenu:hover {
+    background: var(--button-background) !important;
+    border-top: 1px solid var(--panel-border) !important;
+    border-bottom: 1px solid var(--panel-border) !important;
+}
+
+.text-spacer {
+    justify-content: space-between;
+    width: 100%;
+}
+
+.property_value_display {
+    color: var(--text-highlight);
+}
+
+.property_value_display.computed {
+    color: var(--text-disabled);
+}
+
+.graphdialog.rounded, .graphdialog button.rounded, .graphdialog input.rounded {
+    border-radius: var(--border-radius);
+}
+
+.graphdialog.rounded {
+    padding: var(--base-padding);
+    background: var(--popup-background);
+    border: 1px solid var(--panel-border);
+}
+
+.graphdialog {
+    font-size: var(--font-size) !important;
+}

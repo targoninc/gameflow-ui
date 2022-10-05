@@ -1,0 +1,215 @@
+import { UiUtils } from "./uiUtils.js";
+import { FlowBuilder } from "./FlowBuilder.js";
+
+class FlowActions {
+    static saveInfrastructure(graph, toFile = true) {
+        const json = this.generateInfrastructureJSON(graph);
+        const blob = new Blob([JSON.stringify(json)], {type: "text/plain;charset=utf-8"});
+        if (toFile) {
+            this.saveAs(blob, "infrastructure.json");
+            console.info("Infrastructure saved to file!");
+        } else {
+            localStorage.setItem("infrastructure", JSON.stringify(json));
+            console.info("Infrastructure saved to localStorage!");
+        }
+    }
+
+    static saveAs(blob, fileName) {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        a.click();
+    }
+
+    static openInfrastructure(filePickerId, graph) {
+        document.querySelector("#" + filePickerId).click();
+
+        document.getElementById(filePickerId).onchange = (evt) => {
+            const files = evt.target.files;
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                this.generateInfrastructureFromString(event.target.result, graph);
+            }
+            reader.readAsText(file);
+        };
+    }
+
+    static generateInfrastructureFromString(string, graph) {
+        const json = JSON.parse(string);
+        this.generateInfrastructureFromJSON(json, graph);
+    }
+
+    static getSerializableNode(node) {
+        return {
+            type: node.type,
+            dependencies: node.dependencies,
+            properties: this.getSerializableNodeProperties(node),
+            inputs: node.inputs,
+            outputs: node.outputs,
+            widgets: node.widgets,
+            position: node.pos,
+            color: node.color,
+            bgcolor: node.bgcolor,
+            boxcolor: node.boxcolor,
+            id: node.id
+        };
+    }
+
+    static getSerializableNodeProperties(node) {
+        let properties = {};
+        for (let widget of node.widgets) {
+            properties[widget.name] = {
+                type: widget.type,
+                id: widget.options.id,
+                value: widget.value
+            };
+        }
+        return properties;
+    }
+
+    static generateInfrastructureJSON(graph) {
+        let json = {};
+        graph.save();
+        const nodes = graph.getNodes();
+        let jsonodes = [];
+        nodes.forEach((node) => {
+            jsonodes.push(this.getSerializableNode(node));
+        });
+        json["nodes"] = jsonodes;
+        let jsonlinks = [];
+        for (let link in graph.links) {
+            jsonlinks.push(graph.links[link]);
+        }
+        json["links"] = jsonlinks;
+        const groups = graph.getGroups();
+        let jsongroups = [];
+        for (let group in groups) {
+            let g = groups[group];
+            jsongroups.push({
+                title: g.title,
+                color: g.color,
+                font_size: g.font_size,
+                _pos: g._pos,
+                _size: g._size,
+                _bounding: g._bounding,
+            });
+        }
+        json["groups"] = jsongroups;
+        return json;
+    }
+
+    static generateInfrastructureFromJSON(json, graph) {
+        this.generateInfrastructureFromNodes(json["nodes"], json["links"], json["groups"], graph);
+    }
+
+    static generateInfrastructureFromNodes(nodes, links, groups, graph) {
+        graph.clear();
+        graph.start();
+        let progressItem = 0;
+        let progressTotal = (nodes.length + links.length + groups.length);
+        UiUtils.updateProgressers(0);
+        for (let node of nodes) {
+            const nodeToAdd = LiteGraph.createNode(node.type);
+            nodeToAdd.id = node.id;
+            nodeToAdd.pos = node.position;
+            nodeToAdd.color = node.color;
+            nodeToAdd.bgcolor = node.bgcolor;
+            nodeToAdd.boxcolor = node.boxcolor;
+            if (node.widgets) {
+                nodeToAdd.widgets = node.widgets.map((widget) => {
+                    return {
+                        name: widget.name,
+                        type: widget.type,
+                        options: widget.options,
+                        value: widget.value
+                    };
+                });
+            }
+            if (node.properties) {
+                for (let property in node.properties) {
+                    nodeToAdd.addProperty(property, "", node.properties[property].type, {id: node.properties[property].id});
+                }
+            }
+            if (node.inputs) {
+                nodeToAdd.inputs = node.inputs.map((input) => {
+                    return {
+                        name: input.name,
+                        type: input.type,
+                        id: input.id
+                    };
+                });
+            }
+            if (node.outputs) {
+                nodeToAdd.outputs = node.outputs.map((output) => {
+                    return {
+                        name: output.name,
+                        type: output.type,
+                        id: output.id,
+                        links: [],
+                        _data: output._data,
+                        nameLocked: output.nameLocked,
+                        slot_index: output.slot_index
+                    };
+                });
+            }
+            graph.add(nodeToAdd);
+            progressItem++;
+            UiUtils.updateProgressers(progressItem / progressTotal);
+        }
+        for (let link of links) {
+            const origin = graph.getNodeById(link.origin_id);
+            const target = graph.getNodeById(link.target_id);
+            if (origin && target) {
+                origin.connect(link.origin_slot, target, link.target_slot);
+            }
+            progressItem++;
+            UiUtils.updateProgressers(progressItem / progressTotal);
+        }
+        for (let g of groups) {
+            let group = new LGraphGroup(g.title);
+            group.color = g.color;
+            group.font_size = g.font_size;
+            group._pos = g._pos;
+            group._size = g._size;
+            group._bounding = g._bounding;
+            group.graph = graph;
+            graph._groups.push(group);
+            graph._version++;
+            progressItem++;
+            UiUtils.updateProgressers(progressItem / progressTotal);
+        }
+        graph.setDirtyCanvas(false, true);
+        graph.change();
+    }
+
+    static async buildInfrastructure(extensionLoader, graph) {
+        this.actionLog("Building flow...", "info");
+        const flow = (new FlowBuilder()).build(extensionLoader, graph);
+        const flowText = JSON.stringify(flow);
+        localStorage.setItem("flow", flowText);
+        this.actionLog("Flow saved to localStorage!", "success");
+        UiUtils.showDialog("copy", "Copy flow to clipboard", flowText);
+    }
+
+    static actionLog(message, type) {
+        let color = "";
+        switch (type) {
+            case "info":
+                color = "#00bcd4";
+                break;
+            case "error":
+                color = "red";
+                break;
+            case "success":
+                color = "#00ff33";
+                break;
+            default:
+                color = "white";
+                break;
+        }
+        console.log("%c " + message, "color: " + color + "; font-size: 14px;");
+    }
+}
+
+export { FlowActions };

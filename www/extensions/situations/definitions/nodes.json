@@ -22,7 +22,7 @@
         "id": "continue_audio",
         "default": "",
         "mapping": "both",
-        "type": "bool"
+        "type": "toggle"
       },
       {
         "name": "Audio",
@@ -37,6 +37,13 @@
         "default": "",
         "mapping": "none",
         "type": "string"
+      },
+      {
+        "name": "Buttons",
+        "id": "buttons",
+        "default": "",
+        "mapping": "none",
+        "type": "list"
       }
     ]
   }

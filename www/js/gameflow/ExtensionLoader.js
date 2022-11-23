@@ -23,7 +23,7 @@ class ExtensionLoader {
 
     extensions = {};
     defaultExtensions = [
-        "primitives", "logic"
+        "primitives", "logic", "situations"
     ];
 
     async loadExtensions() {

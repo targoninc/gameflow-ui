@@ -5604,7 +5604,7 @@ LGraphNode.prototype.executeAction = function(action)
         //Keyboard ******************
         this._key_callback = this.processKey.bind(this);
 
-        canvas.addEventListener("keydown", this._key_callback, true);
+        document.addEventListener("keydown", this._key_callback, true);
         document.addEventListener("keyup", this._key_callback, true); //in document, otherwise it doesn't fire keyup
 
         //Dropping Stuff over nodes ************************************
@@ -7040,7 +7040,7 @@ LGraphNode.prototype.executeAction = function(action)
             return;
         }
 
-        var block_default = false;
+        let block_default = false;
         //console.log(e); //debug
 
         if (e.target.localName === "input") {
@@ -7079,10 +7079,10 @@ LGraphNode.prototype.executeAction = function(action)
             }
 
             //delete or backspace
-            if (e.keyCode == 46 || e.keyCode == 8) {
+            if (e.code === "Delete" || e.code === "Backspace") {
                 if (
-                    e.target.localName != "input" &&
-                    e.target.localName != "textarea"
+                    e.target.localName !== "input" &&
+                    e.target.localName !== "textarea"
                 ) {
                     this.deleteSelectedNodes();
                     block_default = true;

@@ -178,8 +178,9 @@ class JensElements {
             },
             toggle: {
                 tag: "div",
-                classes: ["toggle", "active"],
+                classes: ["toggle", "ref:active"],
                 title: "ref:toggleTitle",
+                id: "ref:toggleId",
                 onappend: function (element) {
                     element.addEventListener("click", function () {
                         element.classList.toggle("active");
@@ -199,7 +200,13 @@ class JensElements {
                     { tag: "div", classes: ["flex"], children: [
                         { tag: "span", classes: ["extensionIcon", "material-icons", "ref:color"], text: "ref:icon" },
                             { tag: "div", classes: ["flex", "smallgap"], children: [
-                                { template: "toggle", data: { toggleIconActive: "visibility", toggleIconInactive: "visibility_off", toggleTitle: "Toggle visibility in project" } },
+                                { template: "toggle", onclick: function (e) {
+                                    let target = e.target;
+                                    while (!target.classList.contains("toggle")) {
+                                        target = target.parentElement;
+                                    }
+                                    localStorage.setItem("extension_active:" + target.id, target.classList.contains("active") ? "true" : "false");
+                                }, data: { toggleIconActive: "visibility", toggleIconInactive: "visibility_off", toggleTitle: "Toggle visibility in project", active: "ref:extension_active", toggleId: "ref:id" } },
                                 { tag: "span", classes: ["extensionTitle", "stretch"], text: "ref:name" },
                             ]}
                     ]},

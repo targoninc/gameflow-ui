@@ -51,7 +51,7 @@ class NodeTypeCreator {
                         const defaultValue = property.default ?? "";
                         this.addWidget(property.type, property.name, defaultValue, (value, that, node, pos, e) => {
                             node.properties[property.id] = value;
-                        }, {id: property.id, values: {}});
+                        }, {id: property.id, values: property.values ?? []});
                     }
 
                     switch (property.mapping) {
@@ -105,6 +105,7 @@ class NodeTypeCreator {
             return values;
         }
 
+        /*
         NodeToAdd.prototype.onExecute = function () {
             if (category === "logic") {
                 if (!type.logic) {
@@ -154,6 +155,7 @@ class NodeTypeCreator {
                 }
             }
         };
+         */
 
         NodeToAdd.prototype.onNodeCreated = function(nodePos) {
             if (type.requires) {

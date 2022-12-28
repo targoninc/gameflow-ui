@@ -6,9 +6,17 @@
       {
         "name": "SituationType",
         "id": "situationtype",
-        "default": "",
+        "default": "narrator",
         "mapping": "none",
-        "type": "string"
+        "type": "combo",
+        "values": [
+          "narrator",
+          "npc",
+          "input",
+          "player",
+          "secret",
+          "other"
+        ]
       },
       {
         "name": "Text",
@@ -34,7 +42,7 @@
       {
         "name": "Max Volume",
         "id": "maxvolume",
-        "default": "",
+        "default": 0.35,
         "mapping": "none",
         "type": "string"
       },
@@ -53,22 +61,26 @@
         "default": "",
         "mapping": "input",
         "type": "situation"
+      },
+      {
+        "name": "Previous node",
+        "id": "previousnode2",
+        "default": "",
+        "mapping": "input",
+        "type": "situation"
+      },
+      {
+        "name": "Previous node",
+        "id": "previousnode3",
+        "default": "",
+        "mapping": "input",
+        "type": "situation"
       }
     ],
     "outputs": [
       {
         "name": "Continue",
         "id": "continue1",
-        "type": "situation"
-      },
-      {
-        "name": "Continue",
-        "id": "continue2",
-        "type": "situation"
-      },
-      {
-        "name": "Continue",
-        "id": "continue3",
         "type": "situation"
       }
     ]

@@ -56,13 +56,22 @@ class App {
                 e.preventDefault();
                 FlowActions.openInfrastructure("openInfrastructureInput", graph);
             }
-            if (e.key === "q" && e.ctrlKey) {
-                e.preventDefault();
-                const node = LiteGraph.createNode("Situations/situation");
-                node.pos = [200,200];
-                graph.add(node);
+            if (e.ctrlKey) {
+                if (e.key === "q") {
+                    e.preventDefault();
+                    this.addNode("Situations/situation");
+                } else if (e.key === "y") {
+                    e.preventDefault();
+                    this.addNode("Situations/choice");
+                }
             }
         } );
+    }
+
+    addNode(type) {
+        const node = LiteGraph.createNode(type);
+        node.pos = [200,200];
+        this.graph.add(node);
     }
 
     initUi(graph) {

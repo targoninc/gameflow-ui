@@ -35,13 +35,6 @@ class FlowBuilder {
     }
 
     appendStoryFlow(flow, extensionLoader, nodes) {
-        let maxDistance = 0;
-        for (const node of nodes) {
-            node.distance = this.getNodeDistance(node, nodes);
-            if (node.distance > maxDistance) {
-                maxDistance = node.distance;
-            }
-        }
         let toPush = {};
         for (const node of nodes) {
             const category = this.getNodeCategory(node);
@@ -68,28 +61,27 @@ class FlowBuilder {
             }
 
             toPush[node.id].buttons = [];
-            const outputs = node.outputs.filter(o => o.type === "situation");
-            for (let j = 1; j < 4; j++) {
-                if (outputs[j - 1]) {
-                    const output = node.outputs[j - 1];
-                    if (!output.links || !output.links[0]) {
-                        continue;
-                    }
-                    const link = this.graph.links[output.links[0]];
-                    const button = nodes.filter(n => n.id === link.target_id)[0];
-                    const nextNodeOutput = button.outputs[0];
-                    if (!nextNodeOutput.links || !nextNodeOutput.links[0]) {
-                        continue;
-                    }
-                    const nextNodeLink = this.graph.links[nextNodeOutput.links[0]];
-                    const nextNode = nodes.filter(n => n.id === nextNodeLink.target_id)[0];
-
-                    toPush[node.id].buttons.push({
-                        text: node.properties["text"],
-                        image: node.properties["image"],
-                        path: nextNode.id
-                    });
+            const output = node.outputs.filter(o => o.type === "situation")[0];
+            if (!output.links || !output.links[0]) {
+                continue;
+            }
+            for (const linkId of output.links) {
+                const link = this.graph.links[linkId];
+                const button = nodes.filter(n => n.id === link.target_id)[0];
+                const nextNodeOutput = button.outputs[0];
+                if (!nextNodeOutput.links || !nextNodeOutput.links[0]) {
+                    continue;
                 }
+                const nextNodeLink = this.graph.links[nextNodeOutput.links[0]];
+                const nextNode = nodes.filter(n => n.id === nextNodeLink.target_id)[0];
+
+                console.log({button});
+
+                toPush[node.id].buttons.push({
+                    text: button.properties["text"],
+                    image: button.properties["image"],
+                    path: nextNode.id
+                });
             }
         }
         flow.story = toPush;

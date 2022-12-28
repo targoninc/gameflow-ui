@@ -59,9 +59,9 @@ class FlowActions {
     static getSerializableNodeProperties(node) {
         let properties = {};
         for (let widget of node.widgets) {
-            properties[widget.name] = {
+            properties[widget.options.id] = {
                 type: widget.type,
-                id: widget.options.id,
+                name: widget.name,
                 value: widget.value
             };
         }
@@ -126,11 +126,6 @@ class FlowActions {
                     };
                 });
             }
-            if (node.properties) {
-                for (let property in node.properties) {
-                    nodeToAdd.addProperty(property, "", node.properties[property].type, {id: node.properties[property].id});
-                }
-            }
             if (node.inputs) {
                 nodeToAdd.inputs = node.inputs.map((input) => {
                     return {
@@ -152,6 +147,11 @@ class FlowActions {
                         slot_index: output.slot_index
                     };
                 });
+            }
+            if (node.properties) {
+                for (let property in node.properties) {
+                    nodeToAdd.addProperty(property, node.properties[property].value, node.properties[property].type, {name: node.properties[property].name});
+                }
             }
             graph.add(nodeToAdd);
             progressItem++;

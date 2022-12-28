@@ -45,6 +45,68 @@
         "mapping": "none",
         "type": "list"
       }
+    ],
+    "inputs": [
+      {
+        "name": "Previous node",
+        "id": "previousnode",
+        "default": "",
+        "mapping": "input",
+        "type": "situation"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Continue",
+        "id": "continue1",
+        "type": "situation"
+      },
+      {
+        "name": "Continue",
+        "id": "continue2",
+        "type": "situation"
+      },
+      {
+        "name": "Continue",
+        "id": "continue3",
+        "type": "situation"
+      }
+    ]
+  },
+  "choice": {
+    "type": "choice",
+    "title": "Choice",
+    "inputs": [
+      {
+        "name": "Previous node",
+        "id": "previousnode",
+        "default": "",
+        "mapping": "input",
+        "type": "situation"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Text",
+        "id": "text",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "Image",
+        "id": "image",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Continue",
+        "id": "continue",
+        "type": "situation"
+      }
     ]
   }
 }

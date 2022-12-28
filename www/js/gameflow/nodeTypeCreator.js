@@ -74,7 +74,7 @@ class NodeTypeCreator {
             this.shape = "card";
         }
 
-        NodeToAdd.title = UiUtils.capitalizeFirstLetter(category) + " " + type.title;
+        NodeToAdd.title = type.title;
 
         NodeToAdd.prototype.onGetInputs = function () {
             if (!type.extraInputs) {

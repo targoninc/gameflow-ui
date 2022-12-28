@@ -13,7 +13,7 @@
     --button-background: var(--panel-border);
     --button-color: var(--text-primary);
     --font-size: 16px;
-    --sidepanel-width: 300px;
+    --sidepanel-width: 200px;
     --dialog-background: var(--panel-background);
     --heading-padding: calc(var(--base-padding) * .5);
     --inner-shadow: #666;
@@ -23,6 +23,7 @@
     --azure: #335;
     --running: #0044ff;
     --active: #00ff00;
+    --notification-background: #333;
 }
 
 html, body {
@@ -306,4 +307,21 @@ section {
 
 .active .showOnActive, .hideOnActive {
     display: flex;
+}
+
+.notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    width: max-content;
+    align-items: center;
+    justify-content: center;
+    margin: var(--base-padding);
+    border-radius: var(--border-radius);
+    padding: var(--base-padding);
+}
+
+.notification * {
+    color: var(--panel-background);
 }

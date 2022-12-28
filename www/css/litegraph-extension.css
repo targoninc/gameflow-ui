@@ -41,6 +41,7 @@
     justify-content: space-between;
     border: 1px solid var(--panel-border);
     padding: var(--property-padding);
+    border-radius: calc(var(--border-radius) + 1px);
 }
 
 .property_name {

@@ -1,3 +1,5 @@
+import { Jens } from "https://jensjs.com/latest/jens.js";
+
 class UiUtils {
     static updateProgressers(progress) {
         let progressers = document.querySelectorAll(".progress");
@@ -110,8 +112,55 @@ class UiUtils {
         }
     }
 
-    static showDialog(dialogType, title, text) {
+    static showDialog(dialogType, text) {
+        const jens = new Jens();
+        jens.addTemplates({
+            notification: {
+                tag: "div", classes: ["notification", "flex"], css: { "background-color": "ref:color" }, children: [
+                    { tag: "span", classes: ["material-icons"], text: "ref:icon" },
+                    { tag: "span", text: "ref:text" },
+                ]
+            }
+        });
+        const dialog = jens.createFromTemplateName("notification", {
+            color: UiUtils.getColorForStatus(dialogType),
+            icon: UiUtils.getIconForStatus(dialogType),
+            text: text
+        });
+        document.body.appendChild(dialog);
+        setTimeout(() => {
+            dialog.remove();
+        }, 5000);
+    }
 
+    static getColorForStatus(status) {
+        switch (status) {
+            case "info":
+                return "#2196f3";
+            case "warning":
+                return "#ff9800";
+            case "error":
+                return "#f44336";
+            case "success":
+                return "#4caf50";
+            default:
+                return "#2196f3";
+        }
+    }
+
+    static getIconForStatus(dialogType) {
+        switch (dialogType) {
+            case "info":
+                return "info";
+            case "warning":
+                return "warning";
+            case "error":
+                return "error";
+            case "success":
+                return "check_circle";
+            default:
+                return "info";
+        }
     }
 }
 

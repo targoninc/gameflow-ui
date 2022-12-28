@@ -189,7 +189,8 @@ class FlowActions {
         const flowText = JSON.stringify(flow);
         localStorage.setItem("flow", flowText);
         this.actionLog("Flow saved to localStorage!", "success");
-        UiUtils.showDialog("copy", "Copy flow to clipboard", flowText);
+        await navigator.clipboard.writeText(flowText);
+        UiUtils.showDialog("success", "Copied flow to clipboard!");
     }
 
     static actionLog(message, type) {

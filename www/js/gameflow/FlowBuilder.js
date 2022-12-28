@@ -13,38 +13,12 @@ class FlowBuilder {
         const flow = {};
         this.graph = graph;
         const nodes = graph._nodes_in_order;
-        this.appendPreFlow(flow, extensionLoader, nodes);
-        this.appendNodeFlow(flow, extensionLoader, nodes);
-        this.appendPostFlow(flow, extensionLoader, nodes);
+        this.appendStoryFlow(flow, extensionLoader, nodes);
         return flow;
     }
 
-    preFlows = {
-        "azure": ["authenticate", "getauth"]
-    };
-
     getNodeCategory(node) {
         return node.type.substring(0, node.type.indexOf("/")).toLowerCase();
-    }
-
-    appendPreFlow(flow, types, nodes) {
-        for (const node of nodes) {
-            const category = this.getNodeCategory(node);
-            if (this.preFlows[category]) {
-                for (const preFlow of this.preFlows[category]) {
-                    if (flow[category]) {
-                        continue;
-                    }
-                    if (!flow[category]) {
-                        flow[category] = {};
-                    }
-                    flow[category][preFlow] = {
-                        commandSource: category,
-                        command: preFlow
-                    };
-                }
-            }
-        }
     }
 
     getNodeTypeDefinition(extensionLoader, type) {
@@ -60,7 +34,7 @@ class FlowBuilder {
         return null;
     }
 
-    appendNodeFlow(flow, extensionLoader, nodes) {
+    appendStoryFlow(flow, extensionLoader, nodes) {
         let maxDistance = 0;
         for (const node of nodes) {
             node.distance = this.getNodeDistance(node, nodes);
@@ -69,34 +43,89 @@ class FlowBuilder {
             }
         }
         let toPush = {};
-        for (let i = 0; i < maxDistance + 1; i++) {
-            toPush[i] = {};
-            for (const node of nodes) {
-                if (node.distance === i) {
-                    const category = this.getNodeCategory(node);
-                    const nodeTypeDefinition = this.getNodeTypeDefinition(extensionLoader, node.type);
-                    node.dependencies = [];
-                    if (node.inputs) {
-                        for (const input of node.inputs) {
-                            if (input.link) {
-                                const link = this.graph.links[input.link];
-                                node.dependencies.push(link.origin_id);
-                            }
-                        }
-                    }
+        for (const node of nodes) {
+            const category = this.getNodeCategory(node);
 
-                    toPush[i][node.id] = [{
-                        commandSource: category,
-                        command: nodeTypeDefinition,
-                        node: FlowActions.getSerializableNode(node)
-                    }];
+            if (node.type !== "Situations/situation") {
+                continue;
+            }
+
+            const nodeTypeDefinition = this.getNodeTypeDefinition(extensionLoader, node.type);
+            node.dependencies = [];
+            if (node.inputs) {
+                for (const input of node.inputs) {
+                    if (input.link) {
+                        const link = this.graph.links[input.link];
+                        node.dependencies.push(link.origin_id);
+                    }
+                }
+            }
+
+            toPush[node.id] = {};
+            const propertiesToPush = ["situationtype", "text", "continue_audio", "max_volume", "volume_ramp", "audio"];
+            for (const property of propertiesToPush) {
+                this.addPropertyToNodeForPush(toPush[node.id], property, node.properties[property]);
+            }
+
+            toPush[node.id].buttons = [];
+            const outputs = node.outputs.filter(o => o.type === "situation");
+            for (let j = 1; j < 4; j++) {
+                if (outputs[j - 1]) {
+                    const output = node.outputs[j - 1];
+                    if (!output.links || !output.links[0]) {
+                        continue;
+                    }
+                    const link = this.graph.links[output.links[0]];
+                    const button = nodes.filter(n => n.id === link.target_id)[0];
+                    const nextNodeOutput = button.outputs[0];
+                    if (!nextNodeOutput.links || !nextNodeOutput.links[0]) {
+                        continue;
+                    }
+                    const nextNodeLink = this.graph.links[nextNodeOutput.links[0]];
+                    const nextNode = nodes.filter(n => n.id === nextNodeLink.target_id)[0];
+
+                    toPush[node.id].buttons.push({
+                        text: node.properties["text"],
+                        image: node.properties["image"],
+                        path: nextNode.id
+                    });
                 }
             }
         }
-        flow.nodes = toPush;
+        flow.story = toPush;
     }
 
     nodeDists = {};
+
+    addPropertyToNodeForPush(out, property, value) {
+        if (value === "") {
+            value = undefined;
+        }
+
+        switch (property) {
+            case "situationtype":
+                out.type = value ? value : "narrator";
+                break;
+            case "text":
+                out.text = value ? value : "";
+                break;
+            case "continue_audio":
+                out.continue_audio = value ? value : false;
+                break;
+            case "max_volume":
+                out.max_volume = value ? value : .35;
+                break;
+            case "volume_ramp":
+                out.volume_ramp = value ? value : 0;
+                break;
+            case "audio":
+                out.audio = value ? value : "";
+                break;
+            default:
+                break;
+        }
+        return out;
+    }
 
     getNodeDistance(node, nodes) {
         let distance = 0;
@@ -121,9 +150,6 @@ class FlowBuilder {
         }
         this.nodeDists[node.id] = distance;
         return distance;
-    }
-
-    appendPostFlow(flow, types, nodes) {
     }
 }
 

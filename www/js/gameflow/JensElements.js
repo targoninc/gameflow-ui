@@ -156,6 +156,15 @@ class JensElements {
                 attributes: {
                     "panel-type": "globalInputs"
                 },
+                css: {
+                    "resize": "horizontal"
+                },
+                onappend: (e) => {
+                    const resizeObserver = new ResizeObserver(() => {
+                        window.dispatchEvent(new Event('resize'));
+                    });
+                    resizeObserver.observe(e);
+                },
                 classes: ["panel"],
                 children: [
                     { tag: "div", classes: ["infoBox"], children: [

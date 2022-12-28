@@ -16,7 +16,7 @@ class App {
 
         await this.addNodeTypes();
 
-        let node_const = LiteGraph.createNode("Primitives/string");
+        let node_const = LiteGraph.createNode("Situations/situation");
         node_const.pos = [200,200];
         this.graph.add(node_const);
 
@@ -36,7 +36,8 @@ class App {
         this.navigator = new Navigator();
         this.extensionLoader = new ExtensionLoader();
         const elements = new JensElements(this.extensionLoader, this.graph, this.navigator);
-        this.jens = new Jens(elements.export);
+        this.jens = new Jens();
+        this.jens.addTemplates(elements.export);
         await this.navigator.setJens(this.jens);
     }
 
@@ -55,6 +56,12 @@ class App {
                 e.preventDefault();
                 FlowActions.openInfrastructure("openInfrastructureInput", graph);
             }
+            if (e.key === "q" && e.ctrlKey) {
+                e.preventDefault();
+                const node = LiteGraph.createNode("Situations/situation");
+                node.pos = [200,200];
+                graph.add(node);
+            }
         } );
     }
 
@@ -72,7 +79,7 @@ class App {
         this.jens.dataBinder.subscribeToAction("buildInfrastructure", [this.extensionLoader, graph]);
     }
 
-    onWindowResize(e, extraWidth = 0, extraHeight = 0) {
+    onWindowResize(e = null, extraWidth = 0, extraHeight = 0) {
         const canvasDOM = document.querySelector("#litegraph");
         const centerPanel = document.querySelector("#centerPanel");
         if (!canvasDOM || !centerPanel) {

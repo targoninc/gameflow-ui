@@ -1,4 +1,4 @@
-import { UiUtils } from "./uiUtils.js";
+import { UiUtils } from "./UiUtils.js";
 import { FlowBuilder } from "./FlowBuilder.js";
 
 class FlowActions {

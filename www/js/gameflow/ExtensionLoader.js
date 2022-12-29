@@ -1,4 +1,4 @@
-﻿import { UiUtils } from "./uiUtils.js";
+﻿import { UiUtils } from "./UiUtils.js";
 
 class ExtensionLoader {
     defaultConfig = {
@@ -23,7 +23,7 @@ class ExtensionLoader {
 
     extensions = {};
     defaultExtensions = [
-        "primitives", "logic", "situations"
+        "primitives", "logic", "story"
     ];
 
     async loadExtensions() {

@@ -1,5 +1,5 @@
-import { UiUtils } from "./uiUtils.js";
-import { FlowActions } from "./flowActions.js";
+import { UiUtils } from "./UiUtils.js";
+import { FlowActions } from "./FlowActions.js";
 
 class FlowBuilder {
     constructor(config = null) {
@@ -39,7 +39,7 @@ class FlowBuilder {
         for (const node of nodes) {
             const category = this.getNodeCategory(node);
 
-            if (node.type !== "Situations/situation") {
+            if (node.type !== "Story/situation") {
                 continue;
             }
 
@@ -60,31 +60,70 @@ class FlowBuilder {
                 this.addPropertyToNodeForPush(toPush[node.id], property, node.properties[property]);
             }
 
-            toPush[node.id].buttons = [];
-            const output = node.outputs.filter(o => o.type === "situation")[0];
-            if (!output.links || !output.links[0]) {
-                continue;
-            }
-            for (const linkId of output.links) {
-                const link = this.graph.links[linkId];
-                const button = nodes.filter(n => n.id === link.target_id)[0];
-                const nextNodeOutput = button.outputs[0];
-                if (!nextNodeOutput.links || !nextNodeOutput.links[0]) {
-                    continue;
-                }
-                const nextNodeLink = this.graph.links[nextNodeOutput.links[0]];
-                const nextNode = nodes.filter(n => n.id === nextNodeLink.target_id)[0];
-
-                console.log({button});
-
-                toPush[node.id].buttons.push({
-                    text: button.properties["text"],
-                    image: button.properties["image"],
-                    path: nextNode.id
-                });
-            }
+            this.addInputTypeToNodeForPush(nodes, node, toPush, "newitem", "add_items", {type: "type", value: "value", name: "name"});
+            this.addInputTypeToNodeForPush(nodes, node, toPush, "updateitem", "update_items", {name: "name", eval: "eval"});
+            this.addInputTypeToNodeForPush(nodes, node, toPush, "removeitem", "remove_items", {name: "name"});
+            this.addChoicesToSituation(nodes, toPush, node);
         }
         flow.story = toPush;
+    }
+
+    addInputTypeToNodeForPush(nodes, node, toPush, inputType, property, map) {
+        const inputs = node.inputs.filter(i => i.type === inputType);
+        if (!inputs || inputs.length === 0) {
+            return;
+        }
+        toPush[node.id][property] = [];
+        for (const input of inputs) {
+            if (!input.link) {
+                continue;
+            }
+            const link = this.graph.links[input.link];
+            const itemNode = nodes.filter(n => n.id === link.origin_id)[0];
+            let item = {};
+            for (const sourceProperty in map) {
+                item[map[sourceProperty]] = itemNode.properties[sourceProperty];
+            }
+            toPush[node.id][property].push(item);
+        }
+        if (toPush[node.id][property].length === 0) {
+            delete toPush[node.id][property];
+        }
+    }
+
+    addChoicesToSituation(nodes, toPush, node) {
+        toPush[node.id].buttons = [];
+        const output = node.outputs.filter(o => o.type === "situation")[0];
+        if (!output.links || !output.links[0]) {
+            return;
+        }
+        for (const linkId of output.links) {
+            const link = this.graph.links[linkId];
+            const button = nodes.filter(n => n.id === link.target_id)[0];
+            const nextNodeOutput = button.outputs[0];
+            if (!nextNodeOutput.links || !nextNodeOutput.links[0]) {
+                continue;
+            }
+            const nextNodeLink = this.graph.links[nextNodeOutput.links[0]];
+            const nextNode = nodes.filter(n => n.id === nextNodeLink.target_id)[0];
+
+            const buttonToPush = {
+                text: button.properties["text"],
+                image: button.properties["image"],
+                path: nextNode.id
+            };
+            const conditionInput = button.inputs.filter(i => i.type === "condition")[0];
+            if (conditionInput.link > 0) {
+                const conditionLink = this.graph.links[conditionInput.link];
+                const conditionNode = nodes.filter(n => n.id === conditionLink.origin_id)[0];
+                buttonToPush.require = {
+                    type: conditionNode.properties["type"],
+                    item: conditionNode.properties["value"],
+                }
+            }
+
+            toPush[node.id].buttons.push(buttonToPush);
+        }
     }
 
     nodeDists = {};

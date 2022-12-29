@@ -36,7 +36,7 @@ class TemplateListMapper {
             featureCount: object.features.length,
             featureList: object.features.join(", ").length > 0 ? object.features.join(", ") : "no features",
             globalsCount: Object.keys(object.globals.length ?? {}).length,
-            extension_active: localStorage.getItem("extension_active:" + object.id) === "true" ? "active" : "inactive",
+            extension_active: localStorage.getItem("extension_active:" + object.id) === "false" ? "inactive" : "active",
             icon: getFeatureCountIcon(object.features.length / 3),
             color: getFeatureCountColor(object.features.length / 3),
         }

@@ -1,4 +1,4 @@
-import { FlowActions } from "./flowActions.js";
+import { FlowActions } from "./FlowActions.js";
 import { Navigator } from "./Navigator.js";
 
 class JensElements {
@@ -123,7 +123,7 @@ class JensElements {
                 tag: "nav",
                 classes: ["flex"],
                 children: [
-                    { template: "navigationItem", data: { navText: "App", page: "app", navIcon: "home" } },
+                    { template: "navigationItem", data: { navText: "Story", page: "app", navIcon: "home" } },
                     { template: "navigationItem", data: { navText: "Settings", page: "settings", navIcon: "settings" } },
                 ]
             },
@@ -146,7 +146,6 @@ class JensElements {
                 tag: "div",
                 id: "main",
                 children: [
-                    { template: "leftpanel" },
                     { template: "centerpanel" },
                 ]
             },
@@ -181,7 +180,7 @@ class JensElements {
                 },
                 classes: ["panel"],
                 children: [
-                    { tag: "h2", text: "Infrastructure", classes: ["floating"] },
+                    { tag: "h2", text: "Story", classes: ["floating"] },
                     { tag: "canvas", id: "litegraph", width: "1024", height: "720", style: "border: 1px solid" },
                 ]
             },

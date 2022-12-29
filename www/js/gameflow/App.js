@@ -1,9 +1,9 @@
 ﻿import {ExtensionLoader} from "./ExtensionLoader.js";
-import {NodeTypeCreator} from "./nodeTypeCreator.js";
+import {NodeTypeCreator} from "./NodeTypeCreator.js";
 import {Jens} from "https://jensjs.com/latest/jens.js";
 import {JensElements} from "./JensElements.js";
-import {FlowActions} from "./flowActions.js";
-import {UiUtils} from "./uiUtils.js";
+import {FlowActions} from "./FlowActions.js";
+import {UiUtils} from "./UiUtils.js";
 import {Navigator} from "./Navigator.js";
 
 class App {
@@ -16,7 +16,7 @@ class App {
 
         await this.addNodeTypes();
 
-        let node_const = LiteGraph.createNode("Situations/situation");
+        let node_const = LiteGraph.createNode("Story/situation");
         node_const.pos = [200,200];
         this.graph.add(node_const);
 
@@ -59,10 +59,10 @@ class App {
             if (e.ctrlKey) {
                 if (e.key === "q") {
                     e.preventDefault();
-                    this.addNode("Situations/situation");
+                    this.addNode("Story/situation");
                 } else if (e.key === "y") {
                     e.preventDefault();
-                    this.addNode("Situations/choice");
+                    this.addNode("Story/choice");
                 }
             }
         } );

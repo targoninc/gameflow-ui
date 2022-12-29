@@ -1,4 +1,4 @@
-import { UiUtils } from "./uiUtils.js";
+import { UiUtils } from "./UiUtils.js";
 import { TemplateListMapper } from "./TemplateListMapper.js";
 
 class Navigator {

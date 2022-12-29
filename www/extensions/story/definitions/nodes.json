@@ -1,0 +1,274 @@
+{
+  "situation": {
+    "type": "situation",
+    "title": "Situation",
+    "properties": [
+      {
+        "name": "SituationType",
+        "id": "situationtype",
+        "default": "narrator",
+        "mapping": "none",
+        "type": "combo",
+        "values": [
+          "narrator",
+          "npc",
+          "input",
+          "player",
+          "secret",
+          "other"
+        ]
+      },
+      {
+        "name": "Text",
+        "id": "text",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "Continue Audio",
+        "id": "continue_audio",
+        "default": "",
+        "mapping": "none",
+        "type": "toggle"
+      },
+      {
+        "name": "Audio",
+        "id": "audio",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "Max Volume",
+        "id": "maxvolume",
+        "default": 0.35,
+        "mapping": "none",
+        "type": "string"
+      }
+    ],
+    "inputs": [
+      {
+        "name": "Choice 1",
+        "id": "choice1",
+        "default": "",
+        "mapping": "input",
+        "type": "choice"
+      },
+      {
+        "name": "Choice 2",
+        "id": "choice2",
+        "default": "",
+        "mapping": "input",
+        "type": "choice"
+      },
+      {
+        "name": "Choice 3",
+        "id": "choice3",
+        "default": "",
+        "mapping": "input",
+        "type": "choice"
+      },
+      {
+        "name": "New Item 1",
+        "id": "newitem1",
+        "default": "",
+        "mapping": "input",
+        "type": "newitem"
+      },
+      {
+        "name": "New Item 2",
+        "id": "newitem2",
+        "default": "",
+        "mapping": "input",
+        "type": "newitem"
+      },
+      {
+        "name": "New Item 3",
+        "id": "newitem3",
+        "default": "",
+        "mapping": "input",
+        "type": "newitem"
+      },
+      {
+        "name": "Update Item",
+        "id": "updateitem",
+        "default": "",
+        "mapping": "input",
+        "type": "updateitem"
+      },
+      {
+        "name": "Remove Item",
+        "id": "removeitem",
+        "default": "",
+        "mapping": "input",
+        "type": "removeitem"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Situation",
+        "id": "situation",
+        "type": "situation"
+      }
+    ]
+  },
+  "choice": {
+    "type": "choice",
+    "title": "Choice",
+    "inputs": [
+      {
+        "name": "Situation",
+        "id": "situation",
+        "default": "",
+        "mapping": "input",
+        "type": "situation"
+      },
+      {
+        "name": "Condition",
+        "id": "condition",
+        "default": "",
+        "mapping": "input",
+        "type": "condition"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Text",
+        "id": "text",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      },
+      {
+        "name": "Image",
+        "id": "image",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Choice",
+        "id": "choice",
+        "type": "choice"
+      }
+    ]
+  },
+  "new_item": {
+    "type": "new_item",
+    "title": "New Item",
+    "properties": [
+      {
+        "name": "Name",
+        "id": "name",
+        "default": "",
+        "mapping": "both",
+        "type": "string"
+      },
+      {
+        "name": "Type",
+        "id": "type",
+        "default": "normal",
+        "mapping": "none",
+        "type": "combo",
+        "values": [
+          "normal",
+          "hidden"
+        ]
+      },
+      {
+        "name": "Value",
+        "id": "value",
+        "default": "",
+        "mapping": "both",
+        "type": "number"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Item",
+        "id": "item",
+        "type": "newitem"
+      }
+    ]
+  },
+  "remove_item": {
+    "type": "remove_item",
+    "title": "Remove Item",
+    "properties": [
+      {
+        "name": "Name",
+        "id": "name",
+        "default": "",
+        "mapping": "both",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Item",
+        "id": "item",
+        "type": "removeitem"
+      }
+    ]
+  },
+  "update_item": {
+    "type": "update_item",
+    "title": "Update Item Value",
+    "properties": [
+      {
+        "name": "Item Name",
+        "id": "name",
+        "default": "",
+        "mapping": "both",
+        "type": "string"
+      },
+      {
+        "name": "Eval string",
+        "id": "eval",
+        "default": "1 * {value}",
+        "mapping": "both",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Update",
+        "id": "update",
+        "type": "updateitem"
+      }
+    ]
+  },
+  "condition": {
+    "type": "condition",
+    "title": "Condition",
+    "properties": [
+      {
+        "name": "Type",
+        "id": "type",
+        "default": "item",
+        "mapping": "none",
+        "type": "combo",
+        "values": [
+          "item"
+        ]
+      },
+      {
+        "name": "Value",
+        "id": "value",
+        "default": "",
+        "mapping": "input",
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Condition",
+        "id": "condition",
+        "type": "condition"
+      }
+    ]
+  }
+}

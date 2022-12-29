@@ -1,4 +1,4 @@
-import { UiUtils } from "./uiUtils.js";
+import { UiUtils } from "./UiUtils.js";
 import { ExtensionLoader } from "./ExtensionLoader.js";
 import { LogicProcessor } from "./LogicProcessor.js";
 import { Jens } from "https://jensjs.com/latest/jens.js";
@@ -98,6 +98,10 @@ class NodeTypeCreator {
             let values = [];
             if (this.inputs) {
                 for (let i = 0; i < this.inputs.length; i++) {
+                    if (this.inputs[i].type === "choice") {
+                        values.push("");
+                        continue;
+                    }
                     let in_data = this.getInputData(i, true);
                     values.push(in_data);
                 }
@@ -105,7 +109,6 @@ class NodeTypeCreator {
             return values;
         }
 
-        /*
         NodeToAdd.prototype.onExecute = function () {
             if (category === "logic") {
                 if (!type.logic) {
@@ -122,7 +125,12 @@ class NodeTypeCreator {
             if (this.inputs) {
                 for (let i = 0; i < this.inputs.length; i++) {
                     let input = this.inputs[i];
-                    let in_data = this.getInputData(i, true);
+                    let in_data;
+                    if (this.inputs[i].type === "choice") {
+                        in_data = "";
+                    } else {
+                        in_data = this.getInputData(i, true);
+                    }
                     for (let property in this.properties) {
                         if (property === input.id) {
                             this.properties[property] = in_data !== undefined ? in_data : this.properties[property];
@@ -155,7 +163,6 @@ class NodeTypeCreator {
                 }
             }
         };
-         */
 
         NodeToAdd.prototype.onNodeCreated = function(nodePos) {
             if (type.requires) {

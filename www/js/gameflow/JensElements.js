@@ -22,9 +22,9 @@ class JensElements {
                     buttonIcon: "save_alt"
                 },
                 expose: {
-                    action: FlowActions.saveInfrastructure.bind(FlowActions),
+                    action: FlowActions.saveProject.bind(FlowActions),
                     event: "click",
-                    key: "saveInfrastructure",
+                    key: "saveProject",
                     args: [{}]
                 }
             },
@@ -35,13 +35,13 @@ class JensElements {
                     buttonIcon: "folder_open"
                 },
                 expose: {
-                    action: FlowActions.openInfrastructure.bind(FlowActions),
+                    action: FlowActions.openProject.bind(FlowActions),
                     event: "click",
-                    key: "openInfrastructure",
+                    key: "openProject",
                     args: ["", {}]
                 },
                 children: [
-                    { template: "fileInputHidden", id: "openInfrastructureInput" },
+                    { template: "fileInputHidden", id: "openProjectInput" },
                 ]
             },
             buildButton: {
@@ -51,9 +51,9 @@ class JensElements {
                     buttonIcon: "construction"
                 },
                 expose: {
-                    action: FlowActions.buildInfrastructure.bind(FlowActions, extensionLoader, graph),
+                    action: FlowActions.buildProject.bind(FlowActions, extensionLoader, graph),
                     event: "click",
-                    key: "buildInfrastructure",
+                    key: "buildProject",
                     args: [{}, {}]
                 }
             },
@@ -275,6 +275,38 @@ class JensElements {
             settings: {
                 tag: "div", id: "settings", classes: ["flex-v", "settings"], children: [
                     { tag: "h2", text: "Settings" },
+                    { tag: "div", classes: ["flex", "settingsSection"], children: [
+                            {
+                                template: "baseButton",
+                                    data: {
+                                    buttonText: "Save",
+                                        buttonIcon: "save_alt"
+                                },
+                                onclick: (e) => {
+                                    const event = new CustomEvent('action_run', { detail: {
+                                        action_id: "settings_save",
+                                    }});
+                                    window.dispatchEvent(event);
+                                }
+                            },
+                            {
+                                template: "baseButton",
+                                    data: {
+                                    buttonText: "Open",
+                                        buttonIcon: "folder_open"
+                                },
+                                onclick: (e) => {
+                                    const event = new CustomEvent('action_run', { detail: {
+                                            action_id: "settings_open"
+                                        }});
+                                    window.dispatchEvent(event);
+                                },
+                                children: [
+                                    { template: "fileInputHidden", id: "openSettingsInput" },
+                                ]
+                            },
+                        ]
+                    },
                     { tag: "section", classes: ["flex-v"], id: "settings-extensions", onappend: (node) => {
                             navigator.generateTemplateList(node, extensionLoader.extensions, "extension");
                         }, children: [

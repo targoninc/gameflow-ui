@@ -2,16 +2,16 @@ import { UiUtils } from "./UiUtils.js";
 import { FlowBuilder } from "./FlowBuilder.js";
 
 class FlowActions {
-    static saveInfrastructure(graph, toFile = true) {
-        const json = this.generateInfrastructureJSON(graph);
+    static saveProject(graph, toFile = true) {
+        const json = this.generateProjectJson(graph);
         const blob = new Blob([JSON.stringify(json)], {type: "text/plain;charset=utf-8"});
         if (toFile) {
             const id = localStorage.getItem("story-id");
             this.saveAs(blob, `game_${id}.json`);
-            console.info("Project saved to file!");
+            console.info("Build saved to file!");
         } else {
-            localStorage.setItem("infrastructure", JSON.stringify(json));
-            console.info("Project saved to localStorage!");
+            localStorage.setItem("story-build", JSON.stringify(json));
+            console.info("Build saved to localStorage!");
         }
     }
 
@@ -22,7 +22,7 @@ class FlowActions {
         a.click();
     }
 
-    static openInfrastructure(filePickerId, graph) {
+    static openProject(filePickerId, graph) {
         document.querySelector("#" + filePickerId).click();
 
         document.getElementById(filePickerId).onchange = (evt) => {
@@ -33,17 +33,18 @@ class FlowActions {
             UiUtils.setStoryId(id);
             const reader = new FileReader();
             reader.onload = (event) => {
-                this.generateInfrastructureFromString(event.target.result, graph);
+                this.generateProjectFromString(event.target.result, graph);
             }
             reader.readAsText(file);
+            window.app.navigator.setPage("app");
         };
 
         UiUtils.setNewRandomStoryId();
     }
 
-    static generateInfrastructureFromString(string, graph) {
+    static generateProjectFromString(string, graph) {
         const json = JSON.parse(string);
-        this.generateInfrastructureFromJSON(json, graph);
+        this.generateProjectFromJSON(json, graph);
     }
 
     static getSerializableNode(node) {
@@ -74,7 +75,7 @@ class FlowActions {
         return properties;
     }
 
-    static generateInfrastructureJSON(graph) {
+    static generateProjectJson(graph) {
         let json = {};
         graph.save();
         const nodes = graph.getNodes();
@@ -105,11 +106,11 @@ class FlowActions {
         return json;
     }
 
-    static generateInfrastructureFromJSON(json, graph) {
-        this.generateInfrastructureFromNodes(json["nodes"], json["links"], json["groups"], graph);
+    static generateProjectFromJSON(json, graph) {
+        this.generateProjectFromNodes(json["nodes"], json["links"], json["groups"], graph);
     }
 
-    static generateInfrastructureFromNodes(nodes, links, groups, graph) {
+    static generateProjectFromNodes(nodes, links, groups, graph) {
         graph.clear();
         graph.start();
         let progressItem = 0;
@@ -189,7 +190,7 @@ class FlowActions {
         graph.change();
     }
 
-    static async buildInfrastructure(extensionLoader, graph) {
+    static async buildProject(extensionLoader, graph) {
         this.actionLog("Building flow...", "info");
         const flow = (new FlowBuilder()).build(extensionLoader, graph);
         const flowText = JSON.stringify(flow);

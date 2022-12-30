@@ -48,8 +48,8 @@ class Navigator {
         UiUtils.generateTemplateList(this.jens, node, data, templateName);
     }
 
-    async setPage(pageName) {
-        if (arguments && arguments.length > 1) {
+    async setPage(pageName, ignoreSamePage = true) {
+        if (arguments && arguments.length > 1 && arguments[arguments.length - 1] !== false) {
             pageName = arguments[arguments.length - 1];
             if (pageName === "{fromNode}") {
                 let node = arguments[arguments.length - 2];
@@ -58,11 +58,12 @@ class Navigator {
         }
         let page = document.getElementById("page");
 
-        if (this.activePage === pageName) {
+        if (this.activePage === pageName && ignoreSamePage) {
             return;
         }
         const pageTemplate = this.pages[pageName];
         if (!pageTemplate) {
+            console.error(`Page ${pageName} not found`);
             return;
         }
 
@@ -83,6 +84,10 @@ class Navigator {
         if (this.callback) {
             this.callback();
         }
+    }
+
+    async reloadPage() {
+        await this.setPage(this.activePage, false);
     }
 }
 

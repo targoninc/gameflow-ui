@@ -29,6 +29,7 @@ class App {
         this.onWindowResize();
         window.addEventListener("resize", this.onWindowResize.bind(this));
         window.addEventListener("settingchange", this.onSettingChange.bind(this));
+        window.addEventListener("action_run", this.runActionFromEvent.bind(this));
         setTimeout(this.onWindowResize.bind(this), 1000);
     }
 
@@ -65,16 +66,26 @@ class App {
         localStorage.setItem("settings", JSON.stringify(this.settings));
     }
 
+    runActionFromEvent(e) {
+        this.runAction(e.detail.action_id);
+    }
+
     runAction(action) {
         switch (action) {
             case "story_save":
-                FlowActions.saveInfrastructure(this.graph, true);
+                FlowActions.saveProject(this.graph, true);
                 break;
             case "story_save_local":
-                FlowActions.saveInfrastructure(this.graph, false);
+                FlowActions.saveProject(this.graph, false);
                 break;
             case "story_open":
-                FlowActions.openInfrastructure("openInfrastructureInput", this.graph);
+                FlowActions.openProject("openProjectInput", this.graph);
+                break;
+            case "settings_save":
+                this.saveSettingsToFile();
+                break;
+            case "settings_open":
+                this.openSettingsFromFile("openSettingsInput");
                 break;
             case "story_build":
                 console.error("Not implemented yet");
@@ -117,9 +128,9 @@ class App {
     }
 
     loadOmniActions(graph) {
-        this.jens.dataBinder.subscribeToAction("saveInfrastructure", [graph]);
-        this.jens.dataBinder.subscribeToAction("openInfrastructure", ["openInfrastructureInput", graph]);
-        this.jens.dataBinder.subscribeToAction("buildInfrastructure", [this.extensionLoader, graph]);
+        this.jens.dataBinder.subscribeToAction("saveProject", [graph]);
+        this.jens.dataBinder.subscribeToAction("openProject", ["openProjectInput", graph]);
+        this.jens.dataBinder.subscribeToAction("buildProject", [this.extensionLoader, graph]);
     }
 
     onSettingChange(e) {
@@ -245,6 +256,34 @@ class App {
                 e.preventDefault();
             }
         }
+    }
+
+    saveSettingsToFile() {
+        const settingsJson = JSON.stringify(this.settings);
+        const blob = new Blob([settingsJson], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "settings.json";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    openSettingsFromFile(inputId) {
+        document.querySelector("#" + inputId).click();
+        document.getElementById(inputId).onchange = (evt) => {
+            const files = evt.target.files;
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const settingsJson = e.target.result;
+                this.settings = JSON.parse(settingsJson.toString());
+                this.addOrUpdateSetting("keybinds", this.settings.keybinds);
+                this.initKeybinds(this.graph);
+                this.navigator.reloadPage().then();
+            };
+            reader.readAsText(file);
+        };
     }
 }
 

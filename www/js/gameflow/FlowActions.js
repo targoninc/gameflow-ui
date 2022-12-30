@@ -70,7 +70,8 @@ class FlowActions {
             properties[widget.options.id] = {
                 type: widget.type,
                 name: widget.name,
-                value: widget.value
+                value: widget.value,
+                options: widget.options
             };
         }
         return properties;
@@ -158,7 +159,8 @@ class FlowActions {
             }
             if (node.properties) {
                 for (let property in node.properties) {
-                    nodeToAdd.addProperty(property, node.properties[property].value, node.properties[property].type, {name: node.properties[property].name});
+                    const options = node.properties[property];
+                    nodeToAdd.addProperty(property, options.value, options.type, {name: options.name, multiline: options.multiline || false});
                 }
             }
             graph.add(nodeToAdd);

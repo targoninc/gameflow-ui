@@ -45,7 +45,7 @@ class NodeTypeCreator {
             }
             if (type.properties) {
                 for (const property of type.properties) {
-                    this.addProperty(property.id, property.default, property.type, {name: property.name, id: property.id});
+                    this.addProperty(property.id, property.default, property.type, {name: property.name, id: property.id, multiline: property.multiline || false});
 
                     if (!property.computed) {
                         const defaultValue = property.default ?? "";

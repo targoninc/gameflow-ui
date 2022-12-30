@@ -170,7 +170,7 @@ class UiUtils {
         if (!heading) {
             return;
         }
-        heading.innerText = "GameFlow: " + id;
+        heading.innerText = "Project: " + id;
     }
 
     static setNewRandomStoryId() {

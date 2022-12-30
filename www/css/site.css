@@ -1,16 +1,18 @@
 :root {
+    --gameflow-1: #1db0ff;
+    --gameflow-2: #b359ff;
     --panel-background: #222;
     --panel-background-secondary: #2a2a2a;
-    --panel-border: #555;
+    --panel-border: #fff;
     --border-radius: 3px;
     --text-primary: #fff;
     --text-highlight: #0af;
     --text-disabled: #888;
-    --heading-background: #334;
+    --heading-background: var(--gameflow-2);
     --top-height: 89px;
     --base-padding: 10px;
     --button-padding: 2px 8px;
-    --button-background: var(--panel-border);
+    --button-background: #555;
     --button-color: var(--text-primary);
     --font-size: 16px;
     --sidepanel-width: 200px;
@@ -51,7 +53,6 @@ body {
 
 #topPanel {
     min-height: var(--top-height);
-    width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -138,9 +139,20 @@ button:hover {
     color: var(--button-background);
 }
 
+.actionContainer.navigation {
+    padding-bottom: 0 !important;
+    height: max-content;
+    align-self: end;
+    margin-bottom: 0;
+}
+
+.navigationItem button {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
 .navigationItem.active button {
-    border: 1px solid var(--text-primary);
-    box-shadow: 0 13px 0 1px var(--heading-background);
+    border: 1px solid var(--heading-background);
+    background: var(--heading-background);
 }
 
 .hidden {
@@ -281,9 +293,9 @@ section {
 .actionContainer {
     padding: var(--base-padding);
     background: var(--panel-background-secondary);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-radius: var(--border-radius);
     border: 1px solid var(--button-background);
-    border-bottom: none;
+    margin-bottom: 10px;
 }
 
 .toggle {
@@ -294,7 +306,7 @@ section {
 }
 
 .toggle.active {
-    background: var(--panel-border);
+    background: var(--button-background);
 }
 
 .toggle .material-icons {

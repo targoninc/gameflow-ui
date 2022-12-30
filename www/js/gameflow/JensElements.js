@@ -1,5 +1,4 @@
-import { FlowActions } from "./FlowActions.js";
-import { Navigator } from "./Navigator.js";
+import {FlowActions} from "./FlowActions.js";
 
 class JensElements {
     constructor(extensionLoader, graph, navigator) {
@@ -97,16 +96,20 @@ class JensElements {
             },
             apptitle: {
                 tag: "div", classes: ["infoBox", "flex"], children: [
-                    { tag: "h1", text: () => {
-                        const id = localStorage.getItem("story-id") || "Untitled";
-                        return "GameFlow: " + id;
-                    } },
+                    { tag: "div", classes: ["flex"], children: [
+                        { tag: "img", src: "img/logo.svg", classes: ["logo"] },
+                        { tag: "h1", text: () => {
+                            return "Project: " + localStorage.getItem("story-id") || "Untitled";
+                        }},
+                    ]},
                     { tag: "div", classes: ["flex"], children: [
                         { tag: "div", attributes: {"progress-type": "text"}, classes: ["progress"] }
                     ]},
                     { tag: "div", classes: ["flex"], style: {"flex-grow": "1"}, children: [
                         { tag: "div", attributes: {"progress-type": "bar"}, classes: ["progress"] }
                     ]},
+                    { template: "fileactions", classes: ["actionContainer"] },
+                    { template: "actions", classes: ["actionContainer"] },
                 ]
             },
             toppanel: {
@@ -120,16 +123,14 @@ class JensElements {
                     { template: "apptitle" },
                     {
                         tag: "div", classes: ["flex", "row"], children: [
-                            { template: "navigation", classes: ["actionContainer"] },
-                            { template: "fileactions", classes: ["actionContainer"] },
-                            { template: "actions", classes: ["actionContainer"] },
+                            { template: "navigation" },
                         ]
                     }
                 ]
             },
             navigation: {
                 tag: "nav",
-                classes: ["flex"],
+                classes: ["flex", "navigation"],
                 children: [
                     { template: "navigationItem", data: { navText: "Story", page: "app", navIcon: "home" } },
                     { template: "navigationItem", data: { navText: "Settings", page: "settings", navIcon: "settings" } },
@@ -189,7 +190,7 @@ class JensElements {
                 classes: ["panel"],
                 children: [
                     { tag: "h2", text: "Story", classes: ["floating"] },
-                    { tag: "canvas", id: "litegraph", width: "1024", height: "720", style: "border: 1px solid" },
+                    { tag: "canvas", id: "litegraph", width: "1024", height: "720" },
                 ]
             },
             toggle: {

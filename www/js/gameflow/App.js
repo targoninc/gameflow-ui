@@ -97,7 +97,7 @@ class App {
                 this.addNode("Story/choice");
                 break;
             case "add_node_item_new":
-                this.addNode("Story/newItem");
+                this.addNode("Story/new_item");
                 break;
             default:
                 console.error("Unknown action: " + action);
@@ -115,7 +115,9 @@ class App {
         const node = LiteGraph.createNode(type);
         const lastNode = this.graph.getNodes().slice(-1)[0];
         if (lastNode) {
-            node.pos = [lastNode.pos[0] + 100, lastNode.pos[1] + 100];
+            node.pos = [lastNode.pos[0] + 250, lastNode.pos[1]];
+        } else {
+            node.pos = [200, 200];
         }
         this.graph.add(node);
     }

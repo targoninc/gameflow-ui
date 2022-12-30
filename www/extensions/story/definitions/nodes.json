@@ -23,7 +23,8 @@
         "id": "text",
         "default": "",
         "mapping": "input",
-        "type": "string"
+        "type": "string",
+        "multiline": true
       },
       {
         "name": "Continue Audio",

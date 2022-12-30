@@ -8,10 +8,10 @@ class FlowActions {
         if (toFile) {
             const id = localStorage.getItem("story-id");
             this.saveAs(blob, `game_${id}.json`);
-            console.info("Infrastructure saved to file!");
+            console.info("Project saved to file!");
         } else {
             localStorage.setItem("infrastructure", JSON.stringify(json));
-            console.info("Infrastructure saved to localStorage!");
+            console.info("Project saved to localStorage!");
         }
     }
 
@@ -30,7 +30,7 @@ class FlowActions {
             const file = files[0];
             const fileName = file.name;
             const id = fileName.split("_")[1].split(".")[0];
-            localStorage.setItem("story-id", id);
+            UiUtils.setStoryId(id);
             const reader = new FileReader();
             reader.onload = (event) => {
                 this.generateInfrastructureFromString(event.target.result, graph);
@@ -38,8 +38,7 @@ class FlowActions {
             reader.readAsText(file);
         };
 
-        const id = Math.random().toString(36).substring(2, 15);
-        localStorage.setItem("story-id", id);
+        UiUtils.setNewRandomStoryId();
     }
 
     static generateInfrastructureFromString(string, graph) {

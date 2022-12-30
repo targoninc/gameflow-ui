@@ -210,7 +210,7 @@ button:hover {
     }
 }
 
-.statusCount {
+.mono {
     font-family: monospace;
 }
 
@@ -324,4 +324,8 @@ section {
 
 .notification * {
     color: var(--panel-background);
+}
+
+.keybind {
+    width: max-content;
 }

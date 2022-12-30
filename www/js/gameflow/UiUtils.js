@@ -162,6 +162,20 @@ class UiUtils {
                 return "info";
         }
     }
+
+    static setStoryId(id) {
+        localStorage.setItem("story-id", id);
+        const heading = document.querySelector("h1");
+        if (!heading) {
+            return;
+        }
+        heading.innerText = "GameFlow: " + id;
+    }
+
+    static setNewRandomStoryId() {
+        const id = Math.random().toString(36).substring(2, 15);
+        UiUtils.setStoryId(id);
+    }
 }
 
 export { UiUtils };

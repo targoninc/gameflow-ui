@@ -4,10 +4,14 @@ import { Navigator } from "./Navigator.js";
 class JensElements {
     constructor(extensionLoader, graph, navigator) {
         this.export = {
-            actions: {
+            fileactions: {
                 tag: "div", classes: ["flex"], children: [
                     { template: "saveButton" },
                     { template: "openButton" },
+                ]
+            },
+            actions: {
+                tag: "div", classes: ["flex"], children: [
                     { template: "buildButton" },
                 ]
             },
@@ -93,7 +97,10 @@ class JensElements {
             },
             apptitle: {
                 tag: "div", classes: ["infoBox", "flex"], children: [
-                    { tag: "h1", text: "GameFlow" },
+                    { tag: "h1", text: () => {
+                        const id = localStorage.getItem("story-id") || "Untitled";
+                        return "GameFlow: " + id;
+                    } },
                     { tag: "div", classes: ["flex"], children: [
                         { tag: "div", attributes: {"progress-type": "text"}, classes: ["progress"] }
                     ]},
@@ -114,6 +121,7 @@ class JensElements {
                     {
                         tag: "div", classes: ["flex", "row"], children: [
                             { template: "navigation", classes: ["actionContainer"] },
+                            { template: "fileactions", classes: ["actionContainer"] },
                             { template: "actions", classes: ["actionContainer"] },
                         ]
                     }
@@ -228,6 +236,14 @@ class JensElements {
                     ]},
                 ]
             },
+            keybind: {
+                tag: "div",
+                classes: ["keybind", "flex"],
+                children: [
+                    { tag: "span", classes: ["stretch"], text: "ref:display" },
+                    { tag: "span", classes: ["mono"], text: "ref:keys" }
+                ]
+            },
             settings: {
                 tag: "div", id: "settings", classes: ["flex-v", "settings"], children: [
                     { tag: "h2", text: "Settings" },
@@ -235,6 +251,12 @@ class JensElements {
                             navigator.generateTemplateList(node, extensionLoader.extensions, "extension");
                         }, children: [
                             { tag: "h3", text: "Extensions" },
+                        ]
+                    },
+                    { tag: "section", classes: ["flex-v"], id: "settings-keybinds", onappend: (node) => {
+                            navigator.generateTemplateList(node, window.app.settings.keybinds, "keybind");
+                        }, children: [
+                            { tag: "h3", text: "Keybinds" },
                         ]
                     }
                 ]

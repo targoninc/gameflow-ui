@@ -52,7 +52,7 @@ class App {
         }
         this.addOrUpdateSetting("keybinds", {
             story_save: {display: "Save Story", keys: "ctrl+s"},
-            story_save_local: {display: "Save Story (local only)", keys: "ctrl+alt+s"},
+            story_save_local: {display: "Save Story (browser only)", keys: "ctrl+alt+s"},
             story_open: {display: "Open Story", keys: "ctrl+o"},
             story_build: {display: "Build Story", keys: "ctrl+b"},
             add_node_situation: {display: "Add Situation", keys: "ctrl+q"},
@@ -88,7 +88,7 @@ class App {
                 this.openSettingsFromFile("openSettingsInput");
                 break;
             case "story_build":
-                console.error("Not implemented yet");
+                FlowActions.buildProject(this.extensionLoader, this.graph).then();
                 break;
             case "add_node_situation":
                 this.addNode("Story/situation");

@@ -1,19 +1,20 @@
 class TemplateListMapper {
-    static map(type, object) {
+    static map(type, object, index) {
         switch (type) {
             case "extension":
                 return this.mapExtension(object);
             case "keybind":
-                return this.mapKeybind(object);
+                return this.mapKeybind(object, index);
             default:
                 return object;
         }
     }
 
-    static mapKeybind(object) {
+    static mapKeybind(object, index) {
         return {
             display: object.display,
             keys: object.keys,
+            keybindId: index,
         }
     }
 

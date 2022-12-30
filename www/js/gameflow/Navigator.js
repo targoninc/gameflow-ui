@@ -43,7 +43,7 @@ class Navigator {
     generateTemplateList(node, objects, templateName) {
         const data = [];
         for (const object in objects) {
-            data.push(TemplateListMapper.map(templateName, objects[object]));
+            data.push(TemplateListMapper.map(templateName, objects[object], object));
         }
         UiUtils.generateTemplateList(this.jens, node, data, templateName);
     }

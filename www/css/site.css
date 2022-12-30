@@ -326,6 +326,18 @@ section {
     color: var(--panel-background);
 }
 
-.keybind {
-    width: max-content;
+.editableProperty {
+    padding: var(--button-padding);
+}
+
+.editableProperty:hover {
+    background: var(--panel-background);
+}
+
+.property_value {
+    background: var(--button-background);
+    color: var(--button-color);
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    border: none;
 }

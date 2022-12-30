@@ -4,6 +4,7 @@ import {Jens} from "https://jensjs.com/latest/jens.js";
 import {JensElements} from "./JensElements.js";
 import {UiUtils} from "./UiUtils.js";
 import {Navigator} from "./Navigator.js";
+import {FlowActions} from "./FlowActions.js";
 
 class App {
     async init() {
@@ -16,7 +17,7 @@ class App {
         await this.addNodeTypes();
 
         let node_const = LiteGraph.createNode("Story/situation");
-        node_const.pos = [200,200];
+        node_const.pos = [200, 200];
         this.graph.add(node_const);
 
         this.graph.attachCanvas(canvas);
@@ -27,6 +28,7 @@ class App {
 
         this.onWindowResize();
         window.addEventListener("resize", this.onWindowResize.bind(this));
+        window.addEventListener("settingchange", this.onSettingChange.bind(this));
         setTimeout(this.onWindowResize.bind(this), 1000);
     }
 
@@ -47,43 +49,43 @@ class App {
         if (!this.settings) {
             this.settings = {};
         }
-        this.addSetting("keybinds", {
-            saveProject: { display: "Save Story", keys: "ctrl+s" },
-            saveProjectLocalOnly: { display: "Save Story (local only)", keys: "ctrl+alt+s" },
-            openProject: { display: "Open Story", keys: "ctrl+o" },
-            buildStory: { display: "Build Story", keys: "ctrl+b" },
-            addSituation: { display: "Add Situation", keys: "ctrl+q" },
-            addChoice: { display: "Add Choice", keys: "ctrl+y" },
-            addNewItem: { display: "Add New Item", keys: "ctrl+i" },
+        this.addOrUpdateSetting("keybinds", {
+            story_save: {display: "Save Story", keys: "ctrl+s"},
+            story_save_local: {display: "Save Story (local only)", keys: "ctrl+alt+s"},
+            story_open: {display: "Open Story", keys: "ctrl+o"},
+            story_build: {display: "Build Story", keys: "ctrl+b"},
+            add_node_situation: {display: "Add Situation", keys: "ctrl+q"},
+            add_node_choice: {display: "Add Choice", keys: "ctrl+y"},
+            add_node_item_new: {display: "Add New Item", keys: "ctrl+i"},
         })
     }
 
-    addSetting(name, value) {
+    addOrUpdateSetting(name, value) {
         this.settings[name] = value;
         localStorage.setItem("settings", JSON.stringify(this.settings));
     }
 
     runAction(action) {
         switch (action) {
-            case "saveProject":
+            case "story_save":
                 FlowActions.saveInfrastructure(this.graph, true);
                 break;
-            case "saveProjectLocalOnly":
+            case "story_save_local":
                 FlowActions.saveInfrastructure(this.graph, false);
                 break;
-            case "openProject":
+            case "story_open":
                 FlowActions.openInfrastructure("openInfrastructureInput", this.graph);
                 break;
-            case "buildStory":
+            case "story_build":
                 console.error("Not implemented yet");
                 break;
-            case "addSituation":
+            case "add_node_situation":
                 this.addNode("Story/situation");
                 break;
-            case "addChoice":
+            case "add_node_choice":
                 this.addNode("Story/choice");
                 break;
-            case "addNewItem":
+            case "add_node_item_new":
                 this.addNode("Story/newItem");
                 break;
             default:
@@ -93,43 +95,8 @@ class App {
     }
 
     initKeybinds(graph) {
-        document.addEventListener("keydown", (e) => {
-            const keybinds = this.settings.keybinds;
-            for (const keybindAction in keybinds) {
-                const keys = keybinds[keybindAction].keys;
-                const keybindParts = keys.split("+");
-                let keybindMatch = true;
-                for (const keybindPartIndex in keybindParts) {
-                    const keybindPart = keybindParts[keybindPartIndex];
-                    switch (keybindPart) {
-                        case "ctrl":
-                            if (!e.ctrlKey) {
-                                keybindMatch = false;
-                            }
-                            break;
-                        case "alt":
-                            if (!e.altKey) {
-                                keybindMatch = false;
-                            }
-                            break;
-                        case "shift":
-                            if (!e.shiftKey) {
-                                keybindMatch = false;
-                            }
-                            break;
-                        default:
-                            if (e.key !== keybindPart) {
-                                keybindMatch = false;
-                            }
-                            break;
-                    }
-                }
-                if (keybindMatch) {
-                    this.runAction(keybindAction);
-                    e.preventDefault();
-                }
-            }
-        } );
+        document.removeEventListener("keydown", this.onKeyDown);
+        document.addEventListener("keydown", this.onKeyDown);
     }
 
     addNode(type) {
@@ -155,6 +122,41 @@ class App {
         this.jens.dataBinder.subscribeToAction("buildInfrastructure", [this.extensionLoader, graph]);
     }
 
+    onSettingChange(e) {
+        switch (e.detail.section) {
+            case "keybinds":
+                const value = e.detail.value.trim();
+                if (!this.validateKeybind(value)) {
+                    // TODO: implement notifications
+                    console.error("Invalid keybind: " + value);
+                    return;
+                }
+                this.settings.keybinds[e.detail.action_id].keys = value;
+                this.addOrUpdateSetting("keybinds", this.settings.keybinds);
+                this.initKeybinds(this.graph);
+                break;
+        }
+    }
+
+    validateKeybind(keybind) {
+        const keybindParts = keybind.split("+");
+        for (const keybindPartIndex in keybindParts) {
+            const keybindPart = keybindParts[keybindPartIndex];
+            switch (keybindPart) {
+                case "ctrl":
+                case "alt":
+                case "shift":
+                    break;
+                default:
+                    if (keybindPart.length !== 1) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+
     onWindowResize(e = null, extraWidth = 0, extraHeight = 0) {
         const canvasDOM = document.querySelector("#litegraph");
         const centerPanel = document.querySelector("#centerPanel");
@@ -177,7 +179,7 @@ class App {
         }
         this.graph.change();
     }
-    
+
     async addNodeTypes() {
         await this.extensionLoader.loadExtensions();
         const nodeCreator = new NodeTypeCreator();
@@ -203,6 +205,44 @@ class App {
             }
             for (const nodeTypeIndex in extension.nodes) {
                 await nodeCreator.createFromType(this.graph, extensionIndex, extension.nodes[nodeTypeIndex], this.extensionLoader, this.jens);
+            }
+        }
+    }
+
+    onKeyDown(e) {
+        const keybinds = window.app.settings.keybinds;
+        for (const keybindAction in keybinds) {
+            const keys = keybinds[keybindAction].keys;
+            const keybindParts = keys.split("+");
+            let keybindMatch = true;
+            for (const keybindPartIndex in keybindParts) {
+                const keybindPart = keybindParts[keybindPartIndex];
+                switch (keybindPart) {
+                    case "ctrl":
+                        if (!e.ctrlKey) {
+                            keybindMatch = false;
+                        }
+                        break;
+                    case "alt":
+                        if (!e.altKey) {
+                            keybindMatch = false;
+                        }
+                        break;
+                    case "shift":
+                        if (!e.shiftKey) {
+                            keybindMatch = false;
+                        }
+                        break;
+                    default:
+                        if (e.key !== keybindPart) {
+                            keybindMatch = false;
+                        }
+                        break;
+                }
+            }
+            if (keybindMatch) {
+                window.app.runAction(keybindAction);
+                e.preventDefault();
             }
         }
     }

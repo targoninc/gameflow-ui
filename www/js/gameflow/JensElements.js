@@ -240,8 +240,36 @@ class JensElements {
                 tag: "div",
                 classes: ["keybind", "flex"],
                 children: [
-                    { tag: "span", classes: ["stretch"], text: "ref:display" },
-                    { tag: "span", classes: ["mono"], text: "ref:keys" }
+                    { template: "editableProperty", data: { label: "ref:display", init_value: "ref:keys", type: "text", ref_id: "ref:keybindId" } },
+                ]
+            },
+            editableProperty: {
+                tag: "div",
+                classes: ["editableProperty", "flex"],
+                onclick: function (e) {
+                    let target = e.target;
+                    while (!target.classList.contains("editableProperty")) {
+                        target = target.parentElement;
+                    }
+                    let input = target.querySelector("input");
+                    if (input) {
+                        input.focus();
+                    }
+                },
+                children: [
+                    { tag: "span", classes: ["stretch"], text: "ref:label" },
+                    { tag: "input", type: "ref:type", classes: ["mono", "property_value"], id: "ref:ref_id", attributes: { old_value: "ref:init_value" }, value: "ref:init_value", onblur: (e) => {
+                        let target = e.target;
+                        const value = target.value;
+                        const event = new CustomEvent('settingchange', { detail: {
+                            section: "keybinds",
+                            element: target,
+                            value: value,
+                            action_id: target.id,
+                            old_value: target.getAttribute("old_value"),
+                        }});
+                        window.dispatchEvent(event);
+                    }}
                 ]
             },
             settings: {

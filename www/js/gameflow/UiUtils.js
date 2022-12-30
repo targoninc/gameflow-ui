@@ -165,6 +165,7 @@ class UiUtils {
 
     static setStoryId(id) {
         localStorage.setItem("story-id", id);
+        document.title = "GameFlow: " + id;
         const heading = document.querySelector("h1");
         if (!heading) {
             return;

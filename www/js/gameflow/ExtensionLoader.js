@@ -114,7 +114,8 @@ class ExtensionLoader {
         try {
             json = await res.json();
         } catch (error) {
-            console.log("Error parsing JSON: " + error);
+            console.error("Error parsing JSON: " + error);
+            UiUtils.showDialog("error", "Error parsing JSON: " + error);
             json = {};
         }
         this.cache = this.cache ?? {};

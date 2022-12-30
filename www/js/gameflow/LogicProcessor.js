@@ -1,3 +1,5 @@
+import {UiUtils} from "./UiUtils.js";
+
 class LogicProcessor {
     constructor(logic) {
         this.logic = logic;
@@ -9,7 +11,8 @@ class LogicProcessor {
         try {
             result = eval(evalString);
         } catch (e) {
-            console.error(e);
+            console.error("Error while processing logic: " + e)
+            UiUtils.showDialog("error", "Error while processing logic: " + e);
         }
         return result;
     }

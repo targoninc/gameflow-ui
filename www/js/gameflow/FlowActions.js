@@ -8,10 +8,10 @@ class FlowActions {
         if (toFile) {
             const id = localStorage.getItem("story-id");
             this.saveAs(blob, `game_${id}.json`);
-            console.info("Build saved to file!");
+            UiUtils.showDialog("success", "Project saved to file");
         } else {
             localStorage.setItem("story-build", JSON.stringify(json));
-            console.info("Build saved to localStorage!");
+            UiUtils.showDialog("success", "Project saved to browser");
         }
     }
 
@@ -37,6 +37,7 @@ class FlowActions {
             }
             reader.readAsText(file);
             window.app.navigator.setPage("app");
+            UiUtils.showDialog("info", "Project loaded from file");
         };
 
         UiUtils.setNewRandomStoryId();
@@ -197,7 +198,7 @@ class FlowActions {
         localStorage.setItem("flow", flowText);
         this.actionLog("Flow saved to localStorage!", "success");
         await navigator.clipboard.writeText(flowText);
-        UiUtils.showDialog("success", "Copied flow to clipboard!");
+        UiUtils.showDialog("success", "Copied flow to clipboard");
     }
 
     static actionLog(message, type) {

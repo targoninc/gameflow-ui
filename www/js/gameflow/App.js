@@ -101,6 +101,7 @@ class App {
                 break;
             default:
                 console.error("Unknown action: " + action);
+                UiUtils.showDialog("error", "Unknown action: " + action);
                 break;
         }
     }
@@ -138,8 +139,8 @@ class App {
             case "keybinds":
                 const value = e.detail.value.trim();
                 if (!this.validateKeybind(value)) {
-                    // TODO: implement notifications
-                    console.error("Invalid keybind: " + value);
+                    console.error("Invalid keybind: " + value + "\nPlease separate keys with pluses. Supported modifiers are ctrl, alt and shift.");
+                    UiUtils.showDialog("error", "Invalid keybind: " + value + "\nPlease separate keys with pluses. Supported modifiers are ctrl, alt and shift.");
                     return;
                 }
                 this.settings.keybinds[e.detail.action_id].keys = value;
@@ -267,6 +268,7 @@ class App {
         a.download = "settings.json";
         a.click();
         URL.revokeObjectURL(url);
+        UiUtils.showDialog("info", "Settings saved to file");
     }
 
     openSettingsFromFile(inputId) {
@@ -281,6 +283,7 @@ class App {
                 this.addOrUpdateSetting("keybinds", this.settings.keybinds);
                 this.initKeybinds(this.graph);
                 this.navigator.reloadPage().then();
+                UiUtils.showDialog("info", "Settings loaded from file");
             };
             reader.readAsText(file);
         };

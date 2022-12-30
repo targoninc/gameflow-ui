@@ -32,6 +32,9 @@ class App {
     }
 
     async preInit() {
+        const id = Math.random().toString(36).substring(2, 15);
+        localStorage.setItem("story-id", id);
+
         this.graph = new LGraph();
         this.navigator = new Navigator();
         this.extensionLoader = new ExtensionLoader();

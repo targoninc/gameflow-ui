@@ -71,7 +71,7 @@ class FlowActions {
                 type: widget.type,
                 name: widget.name,
                 value: widget.value,
-                options: widget.options
+                multiline: widget.options.multiline
             };
         }
         return properties;

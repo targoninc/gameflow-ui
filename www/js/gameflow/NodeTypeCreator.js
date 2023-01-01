@@ -51,7 +51,7 @@ class NodeTypeCreator {
                         const defaultValue = property.default ?? "";
                         this.addWidget(property.type, property.name, defaultValue, (value, that, node, pos, e) => {
                             node.properties[property.id] = value;
-                        }, {id: property.id, values: property.values ?? []});
+                        }, {id: property.id, values: property.values ?? [], multiline: property.multiline ?? false});
                     }
 
                     switch (property.mapping) {

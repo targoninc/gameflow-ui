@@ -3331,18 +3331,18 @@
      * @param {string} name
      * @param {*} default_value
      * @param {string} type string defining the output type ("vec3","number",...)
-     * @param {Object} extra_info this can be used to have special properties of the property (like values, etc)
+     * @param {Object} options this can be used to have special properties of the property (like values, etc)
      */
     LGraphNode.prototype.addProperty = function(
         name,
         default_value,
         type,
-        extra_info
+        options
     ) {
-        var o = { name: name, type: type, default_value: default_value };
-        if (extra_info) {
-            for (var i in extra_info) {
-                o[i] = extra_info[i];
+        let o = { name: name, type: type, default_value: default_value };
+        if (options) {
+            for (let i in options) {
+                o[i] = options[i];
             }
         }
         if (!this.properties_info) {

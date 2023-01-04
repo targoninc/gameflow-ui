@@ -10394,7 +10394,9 @@ LGraphNode.prototype.executeAction = function(action)
 
         if (node.onMenuNodeInputs) {
             var retEntries = node.onMenuNodeInputs(entries);
-            if(retEntries) entries = retEntries;
+            if (retEntries) {
+                entries = retEntries;
+            }
         }
 
         if (!entries.length) {
@@ -12942,7 +12944,10 @@ LGraphNode.prototype.executeAction = function(action)
                     content: "Collapse",
                     callback: LGraphCanvas.onMenuNodeCollapse
                 },
-                { content: "Pin", callback: LGraphCanvas.onMenuNodePin },
+                {
+                    content: "Pin",
+                    callback: LGraphCanvas.onMenuNodePin
+                },
                 {
                     content: "Colors",
                     has_submenu: true,
@@ -12953,7 +12958,6 @@ LGraphNode.prototype.executeAction = function(action)
                     has_submenu: true,
                     callback: LGraphCanvas.onMenuNodeShapes
                 },
-                null
             );
         }
 
